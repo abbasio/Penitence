@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dipse8tx4kc4i"]
+
+[ext_resource type="Script" path="res://src/Scripts/Spire.cs" id="1_26vr7"]
+[ext_resource type="Texture2D" uid="uid://dnlw8w11uj3ok" path="res://icon.svg" id="2_cdb0v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5vnu4"]
+size = Vector2(55, 55)
+
+[node name="Spire" type="Area2D"]
+script = ExtResource("1_26vr7")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_cdb0v")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, 0.5)
+shape = SubResource("RectangleShape2D_5vnu4")
+metadata/_edit_lock_ = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

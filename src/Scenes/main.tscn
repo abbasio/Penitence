@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://c1u6sqjiggxgx"]
+
+[ext_resource type="PackedScene" uid="uid://ciskdyq67fy67" path="res://src/Scenes/player.tscn" id="1_8qftv"]
+[ext_resource type="Script" path="res://src/Scripts/Main.cs" id="1_uwbbi"]
+[ext_resource type="PackedScene" uid="uid://dipse8tx4kc4i" path="res://src/Scenes/spire.tscn" id="2_f43sq"]
+[ext_resource type="PackedScene" uid="uid://bxgfm5ke1wauy" path="res://src/Scenes/Enemy.tscn" id="2_t8k4e"]
+
+[sub_resource type="Curve2D" id="Curve2D_4hrdb"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1272, 0, 0, 0, 0, 0, 1272, 720, 0, 0, 0, 0, 8, 720, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="Night" type="Node"]
+script = ExtResource("1_uwbbi")
+EnemyScene = ExtResource("2_t8k4e")
+
+[node name="Player" parent="." instance=ExtResource("1_8qftv")]
+position = Vector2(585, 496)
+
+[node name="EnemyPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_4hrdb")
+
+[node name="EnemySpawnLocation" type="PathFollow2D" parent="EnemyPath"]
+
+[node name="EnemyTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="Spire" parent="." instance=ExtResource("2_f43sq")]
+
+[connection signal="body_entered" from="Player" to="Player" method="_on_body_entered"]
+[connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]

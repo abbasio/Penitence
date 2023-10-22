@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://dipse8tx4kc4i"]
 
-[ext_resource type="Script" path="res://src/Scripts/Spire.cs" id="1_26vr7"]
+[ext_resource type="Script" path="res://src/Scripts/Soul.cs" id="1_s6g5f"]
 [ext_resource type="Texture2D" uid="uid://dnlw8w11uj3ok" path="res://icon.svg" id="2_cdb0v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5vnu4"]
 size = Vector2(55, 55)
 
-[node name="Spire" type="Area2D"]
-script = ExtResource("1_26vr7")
+[node name="Soul" type="Area2D"]
+script = ExtResource("1_s6g5f")
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -5,11 +5,14 @@ using static Godot.GD;
 public partial class Player : Area2D
 {
 	[Export]
-	public int Speed { get; set; } = 5;
+	public int Speed { get; set; } = 3;
 	[Export]
 	public int Health { get; set; } = 100;
+	public string Form = "day";
 
 	public Vector2 ScreenSize;
+
+	public AnimatedSprite2D sprite;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -20,19 +23,28 @@ public partial class Player : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-    	var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+    	sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
 		Vector2 velocity = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 
-		if (velocity == Vector2.Zero)
+		if (Form == "day")
 		{
-			animatedSprite2D.Stop();
-			animatedSprite2D.Animation = "idle";
+			if (velocity == Vector2.Zero)
+			{
+				sprite.Animation = "idle";
+			}
+			else
+			{
+				sprite.Play();
+				sprite.Animation = "walk_side";
+				sprite.FlipH = velocity.X < 0;
+			}
+
 		}
-		else
+
+		if (Form == "night")
 		{
-			animatedSprite2D.Play();
-			animatedSprite2D.Animation = "walk";
-			animatedSprite2D.FlipH = velocity.X < 0;
+			sprite.Animation = "idle_night";
 		}
 
 		this.Position += velocity * Speed;
@@ -40,18 +52,39 @@ public partial class Player : Area2D
     		x: Mathf.Clamp(Position.X , 30, ScreenSize.X - 30),
     		y: Mathf.Clamp(Position.Y, 20, ScreenSize.Y - 40)
 		);
+
+		if (Health <= 0)
+		{
+			die();
+		}
 	
 	}
-	private void kill(RigidBody2D enemy)
+
+	public void becomeNight()
 	{
-		enemy.GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
-		enemy.LinearVelocity = Vector2.Zero;
-		var sprite = enemy.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		sprite.Animation = "die";
+		Form = "night";
 	}
-	private void _on_body_entered(RigidBody2D enemy)
+
+	public void becomeDay()
 	{
-    	kill(enemy);
+		Form = "day";
+	}
+
+	private void _on_body_entered(Enemy enemy)
+	{
+		if (Form == "night")
+		{
+			enemy.die();
+		}
+		if (Form == "day")
+		{
+			Health -= 10;
+		}
+	}
+
+	public void die()
+	{
+		QueueFree();
 	}
 }
 

@@ -1,27 +1,51 @@
 using Godot;
 using System;
+using static Global.Utilities;
 
-public partial class Enemy : RigidBody2D
+public partial class Enemy : CharacterBody2D
 {
-	public float Speed { get; set; } = 1;
-	public float Health { get; set; } = 3;
+	[Export]
+	public int Health { get; set; } = 3;
+	public float Speed = 2;
+	public Vector2 velocity { get; set; } = Vector2.Zero;
 
-	// Called when the node enters the scene tree for the first time.
+	public Area2D target;
+	public AnimatedSprite2D sprite;
+
 	public override void _Ready()
 	{
-		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		animatedSprite2D.Play();
-		animatedSprite2D.Animation = "walk";
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
-	private void _on_animated_sprite_2d_animation_finished()
-	{
-		QueueFree();
+		sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		sprite.Play();
+		sprite.Animation = "walk";
 	}
 	
+	public override void _PhysicsProcess(double delta)
+	{
+		sprite.FlipH = Position.X > target.Position.X;
+		velocity = GlobalPosition.DirectionTo(target.GlobalPosition);
+		MoveAndCollide(velocity * Speed);
+
+		if (isAnimationOver(sprite, "hit"))
+		{
+			sprite.Animation = "walk";
+		}
+
+		if (isAnimationOver(sprite, "die"))
+		{
+			QueueFree();
+		}
+	}
+	public void hit(Bullet bullet)
+	{
+		sprite.Animation = ("hit");
+		bullet.QueueFree();
+		Health -= 1;
+		if (Health <= 0) die();
+	}
+	public void die()
+	{
+		Speed = 0;
+		sprite.Animation = ("die");
+		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+	}
 }

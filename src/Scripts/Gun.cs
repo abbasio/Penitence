@@ -9,8 +9,8 @@ public partial class Gun : Sprite2D
 	public int Damage { get; set; } = 1;
 	[Export]
 	public PackedScene BulletScene { get; set; }
-
 	public bool canFire { get; set; } = true;
+	public Player player;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -37,6 +37,10 @@ public partial class Gun : Sprite2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (player.Position != Vector2.Zero)
+		{
+			Position = new Vector2(player.Position.X + 2, player.Position.Y + 3);
+		}
 		LookAt(GetGlobalMousePosition());
 		FlipV = GetGlobalMousePosition().X < Position.X;
 		if (Input.IsActionPressed("shoot") && canFire)

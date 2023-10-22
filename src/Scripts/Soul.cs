@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Spire : Area2D
+public partial class Soul : Area2D
 {
 	[Signal]
 	public delegate void HitEventHandler();
@@ -27,15 +27,11 @@ public partial class Spire : Area2D
 	public override void _Process(double delta)
 	{
 	}
-	private void _on_body_entered(RigidBody2D enemy)
+	private void _on_body_entered(Enemy enemy)
 	{
-		enemy.LinearVelocity = Vector2.Zero;
-		enemy.GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
-		var sprite = enemy.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		sprite.Animation = "attack";
+		
+		enemy.QueueFree();
     	this.Health -= 10; 
-    	GD.Print(this.Health);
-    	
 		if (this.Health <= 0)
 		{
 			QueueFree();

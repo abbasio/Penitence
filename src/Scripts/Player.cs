@@ -18,12 +18,12 @@ public partial class Player : Area2D
 	public override void _Ready()
 	{
 		ScreenSize = GetViewportRect().Size;
+    	sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-    	sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
 		Vector2 velocity = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 

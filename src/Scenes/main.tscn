@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1u6sqjiggxgx"]
+[gd_scene load_steps=8 format=3 uid="uid://c1u6sqjiggxgx"]
 
 [ext_resource type="Script" path="res://src/Scripts/Main.cs" id="1_uwbbi"]
 [ext_resource type="PackedScene" uid="uid://c16ao5nuinwxg" path="res://src/Scenes/Enemy.tscn" id="2_6yufq"]
 [ext_resource type="PackedScene" uid="uid://dipse8tx4kc4i" path="res://src/Scenes/Soul.tscn" id="2_f43sq"]
 [ext_resource type="PackedScene" uid="uid://crel0gggj8x1i" path="res://src/Scenes/Player.tscn" id="6_6smhh"]
+[ext_resource type="PackedScene" uid="uid://dbmrwxq4mvviw" path="res://src/Scenes/Choice.tscn" id="6_aa2ii"]
 [ext_resource type="PackedScene" uid="uid://dddsfmw4pdic" path="res://src/Scenes/Gun.tscn" id="7_qc318"]
 
 [sub_resource type="Curve2D" id="Curve2D_4hrdb"]
@@ -29,10 +30,8 @@ curve = SubResource("Curve2D_4hrdb")
 wait_time = 5.0
 
 [node name="DayTimer" type="Timer" parent="."]
-wait_time = 10.0
 
 [node name="NightTimer" type="Timer" parent="."]
-wait_time = 10.0
 
 [node name="Player" parent="." instance=ExtResource("6_6smhh")]
 scale = Vector2(3, 3)
@@ -40,6 +39,8 @@ scale = Vector2(3, 3)
 [node name="Gun" parent="." instance=ExtResource("7_qc318")]
 scale = Vector2(3, 3)
 FireRate = 0.2
+
+[node name="Choice" parent="." instance=ExtResource("6_aa2ii")]
 
 [connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]
 [connection signal="timeout" from="ReadyTimer" to="." method="_on_ready_timer_timeout"]

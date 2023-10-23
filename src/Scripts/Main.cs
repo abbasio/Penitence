@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using static Godot.GD;
+
 
 public partial class Main : Node
 {
@@ -11,15 +13,23 @@ public partial class Main : Node
 	public Timer dayTimer;
 	public Timer nightTimer;
 	public Timer readyTimer;
+	public int dayCount = 0;
 
 	public Player Player;
 
 	public Gun Gun;
 
 	public bool isDay = true;
+
+	class Power
+    {
+        public string Day { get; set; }
+        public string Night { get; set; }
+    }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		GetNode<Control>("Choice").Hide();
 		Player =  GetNode<Player>("Player");
 		Gun = GetNode<Gun>("Gun");
 		Gun.player = Player;
@@ -43,7 +53,8 @@ public partial class Main : Node
 		if (isDay)
 		{
 			Player.becomeDay();
-			AddChild(Gun);
+			if (!HasNode(GetPathTo(Gun))) AddChild(Gun);
+			if (dayCount > 0) choosePowerup();
 		}
 		else
 		{
@@ -64,6 +75,7 @@ public partial class Main : Node
 	}
 	private void _on_night_timer_timeout()
 	{
+		dayCount++;
 		nightTimer.Stop();
 		isDay = true;
 		Print("Night done!");
@@ -93,5 +105,24 @@ public partial class Main : Node
 	private void _on_enemy_timer_timeout()
 	{
     	spawnEnemy();
+	}
+	public void choosePowerup()
+	{
+		var Powers = new Dictionary<int, Power>()
+        {
+            { 1, new Power 
+                { 
+                    Day="BODY\n By day, you do more damage to the undead\nBy night, the spirits increase in number...", 
+                    Night="SOUL\n By night, your spirit moves with greater haste\n By day, the undead grow stronger..."
+                }
+            },
+        };
+		Button dayButton = (Button)GetNode<Control>("Choice").FindChild("Day", true);
+		dayButton.Text = Powers[dayCount].Day;
+		Button nightButton = (Button)GetNode<Control>("Choice").FindChild("Night", true);
+		nightButton.Text = Powers[dayCount].Night;
+		GetTree().Paused = true;
+		GD.Print("Game Paused until power is selected");
+		GetNode<Control>("Choice").Show();
 	}
 }

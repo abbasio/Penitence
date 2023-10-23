@@ -48,4 +48,5 @@ public partial class Enemy : CharacterBody2D
 		sprite.Animation = ("die");
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 	}
+
 }

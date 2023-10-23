@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbmrwxq4mvviw"]
+
+[ext_resource type="Script" path="res://src/Scripts/Choice.cs" id="1_a2rdt"]
+
+[node name="Choice" type="Control"]
+layout_mode = 3
+anchor_left = -0.002
+anchor_right = -0.002
+offset_left = -0.44
+offset_right = 1283.56
+offset_bottom = 726.0
+script = ExtResource("1_a2rdt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -329.0
+offset_top = -50.0
+offset_right = 329.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Day" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Night" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[connection signal="pressed" from="HBoxContainer/Day" to="." method="_on_day_pressed"]
+[connection signal="pressed" from="HBoxContainer/Night" to="." method="_on_night_pressed"]

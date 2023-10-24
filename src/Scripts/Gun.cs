@@ -27,6 +27,7 @@ public partial class Gun : Sprite2D
 		fireEffect.Play();
 
 		Bullet bullet = BulletScene.Instantiate<Bullet>();
+		bullet.Damage = Damage;
 
 		var levelRoot = GetParent();
 		bullet.fire(fireEffect.GlobalPosition, Rotation);

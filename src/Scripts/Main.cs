@@ -20,8 +20,16 @@ public partial class Main : Node
 	public Gun Gun;
 
 	public bool isDay = true;
+	public int enemySpeedModifier = 0;
+	public int bodySpeedModifier = 0;
+	public int soulSpeedModifier = 0;
+	public float dayTimerWaitTime = 10;
+	public float nightTimerWaitTime = 10;
+	public float enemyTimerDay = 1;
+	public float enemyTimerNight = 1;
+	public 
 
-	class Power
+	class Choice
     {
         public string Day { get; set; }
         public string Night { get; set; }
@@ -35,7 +43,9 @@ public partial class Main : Node
 		Gun.player = Player;
 		enemyTimer = GetNode<Timer>("EnemyTimer");
 		dayTimer = GetNode<Timer>("DayTimer");
+		dayTimer.WaitTime = dayTimerWaitTime;
 		nightTimer = GetNode<Timer>("NightTimer");
+		nightTimer.WaitTime = nightTimerWaitTime;	
 		readyTimer = GetNode<Timer>("ReadyTimer");
 		soulPosition = GetNode<Soul>("Soul").Position;
 		readyTimer.Start();
@@ -55,11 +65,16 @@ public partial class Main : Node
 			Player.becomeDay();
 			if (!HasNode(GetPathTo(Gun))) AddChild(Gun);
 			if (dayCount > 0) choosePowerup();
+			enemyTimer.WaitTime = enemyTimerDay;
+			GD.Print(Gun.Damage);
+			GD.Print(enemyTimer.WaitTime);
 		}
 		else
 		{
 			Player.becomeNight();
 			RemoveChild(Gun);
+			enemyTimer.WaitTime = enemyTimerNight;
+			GD.Print(enemyTimer.WaitTime);
 		}
 		timerToUse.Start();
 		enemyTimer.Start();	
@@ -108,9 +123,9 @@ public partial class Main : Node
 	}
 	public void choosePowerup()
 	{
-		var Powers = new Dictionary<int, Power>()
+		var Choices = new Dictionary<int, Choice>()
         {
-            { 1, new Power 
+            { 1, new Choice 
                 { 
                     Day="BODY\n By day, you do more damage to the undead\nBy night, the spirits increase in number...", 
                     Night="SOUL\n By night, your spirit moves with greater haste\n By day, the undead grow stronger..."
@@ -118,11 +133,24 @@ public partial class Main : Node
             },
         };
 		Button dayButton = (Button)GetNode<Control>("Choice").FindChild("Day", true);
-		dayButton.Text = Powers[dayCount].Day;
+		dayButton.Text = Choices[dayCount].Day;
+		dayButton.Pressed += dayOneBody;
 		Button nightButton = (Button)GetNode<Control>("Choice").FindChild("Night", true);
-		nightButton.Text = Powers[dayCount].Night;
+		nightButton.Text = Choices[dayCount].Night;
 		GetTree().Paused = true;
 		GD.Print("Game Paused until power is selected");
 		GetNode<Control>("Choice").Show();
+	}
+	class Consequence
+	{
+		public delegate void Body();
+		public delegate void Soul();
+	}
+
+	private void dayOneBody()
+	{
+		GD.Print("gun does more damage, enemies spawn faster at night");
+		Gun.Damage = 2;
+		enemyTimerNight = (float)0.5;
 	}
 }

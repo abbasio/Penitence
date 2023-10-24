@@ -5,6 +5,7 @@ public partial class Bullet : Area2D
 {
 	public float Speed = 2;
 	public Vector2 velocity { get; set; } = Vector2.Zero;
+	public int Damage = 0;
 	public void fire(Vector2 position, float direction)
 	{
 		Position = position;

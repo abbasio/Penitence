@@ -39,7 +39,7 @@ public partial class Enemy : CharacterBody2D
 	{
 		sprite.Animation = ("hit");
 		bullet.QueueFree();
-		Health -= 1;
+		Health -= bullet.Damage;
 		if (Health <= 0) die();
 	}
 	public void die()

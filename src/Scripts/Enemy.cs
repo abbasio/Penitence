@@ -7,6 +7,7 @@ public partial class Enemy : CharacterBody2D
 	[Export]
 	public int Health { get; set; } = 3;
 	public float Speed = 2;
+	public int Damage { get; set; } = 10;
 	public Vector2 velocity { get; set; } = Vector2.Zero;
 
 	public Area2D target;

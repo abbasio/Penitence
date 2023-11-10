@@ -21,8 +21,7 @@ public partial class Main : Node
 
 	public bool isDay = true;
 	public int enemySpeedModifier = 0;
-	public int bodySpeedModifier = 0;
-	public int soulSpeedModifier = 0;
+	public int enemyDamageModifier = 0;
 	public float dayTimerWaitTime = 10;
 	public float nightTimerWaitTime = 10;
 	public float enemyTimerDay = 1;
@@ -109,6 +108,7 @@ public partial class Main : Node
     	enemySpawnLocation.ProgressRatio = Randf();
 		
 		enemy.target = isDay ? player : soul;
+		enemy.Damage += enemyDamageModifier;
 
     	// Set the mob's position to a random location.
     	enemy.Position = enemySpawnLocation.Position;
@@ -137,20 +137,21 @@ public partial class Main : Node
 		dayButton.Pressed += dayOneBody;
 		Button nightButton = (Button)GetNode<Control>("Choice").FindChild("Night", true);
 		nightButton.Text = Choices[dayCount].Night;
+		nightButton.Pressed += dayOneSoul;
 		GetTree().Paused = true;
 		GD.Print("Game Paused until power is selected");
 		GetNode<Control>("Choice").Show();
 	}
-	class Consequence
-	{
-		public delegate void Body();
-		public delegate void Soul();
-	}
-
 	private void dayOneBody()
 	{
 		GD.Print("gun does more damage, enemies spawn faster at night");
 		Gun.Damage = 2;
 		enemyTimerNight = (float)0.5;
+	}
+	private void dayOneSoul()
+	{
+		GD.Print("sprit form moves faster, daytime enemies do more damage");
+		enemyDamageModifier += 10;
+		Player.nightSpeed += 2;
 	}
 }

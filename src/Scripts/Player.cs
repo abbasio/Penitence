@@ -6,6 +6,8 @@ public partial class Player : Area2D
 {
 	[Export]
 	public int Speed { get; set; } = 3;
+	public int nightSpeed = 3;
+	public int daySpeed = 3;
 	[Export]
 	public int Health { get; set; } = 100;
 	public string Form = "day";
@@ -63,11 +65,13 @@ public partial class Player : Area2D
 	public void becomeNight()
 	{
 		Form = "night";
+		Speed = nightSpeed;
 	}
 
 	public void becomeDay()
 	{
 		Form = "day";
+		Speed = daySpeed;
 	}
 
 	private void _on_body_entered(Enemy enemy)
@@ -78,7 +82,8 @@ public partial class Player : Area2D
 		}
 		if (Form == "day")
 		{
-			Health -= 10;
+			GD.Print(enemy.Damage);
+			Health -= enemy.Damage;
 		}
 	}
 
